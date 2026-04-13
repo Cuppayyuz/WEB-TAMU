@@ -14,19 +14,20 @@ return new class extends Migration
         Schema::create('web_tamus', function (Blueprint $table) {
             $table->id();
 
-            // Kolom Wajib
-            $table->enum('jenis_tamu', ['guru', 'siswa']);
-            $table->string('nama');
+            // Status sesi saat ini
+            $table->enum('status', ['draft', 'selesai'])->default('draft');
 
-            // Kolom Spesifik (Dibuat nullable agar tidak error saat disubmit)
+            // Kolom Wajib (Sekarang nullable karena diisi menyusul oleh petugas)
+            $table->enum('jenis_tamu', ['guru', 'siswa'])->nullable();
+            $table->string('nama')->nullable(); // <-- INI YANG BIKIN ERROR, PASTIKAN ADA ->nullable()
+    
+            // Kolom Spesifik
             $table->string('mapel')->nullable();
             $table->string('kelas')->nullable();
             $table->string('jurusan')->nullable();
 
             // Kolom Tanda Tangan
-            // Menggunakan text() karena jika kamu menyimpan ttd dalam format Base64, stringnya akan sangat panjang.
-            // Jika kamu menyimpannya sebagai file gambar (.png) di storage, string() biasa sudah cukup.
-            $table->text('tanda_tangan');
+            $table->text('tanda_tangan')->nullable();
 
             $table->timestamps();
         });
